@@ -20,7 +20,7 @@ export const GAMES: Game[] = [
   {
     slug: "faceoff",
     title: "Face Off",
-    year: 1989,
+    year: 1991,
     publisher: "Krisalis",
     description: "Hockey sobre hielo rápido y brutal, con peleas incluidas.",
     disk: "/games/faceoff/disk1.adf",
