@@ -14,13 +14,13 @@ export type Game = {
 };
 
 /** Kickstart ROM compartida por todos los juegos */
-export const KICKSTART_ROM = "/amiga/kick.rom";
+export const KICKSTART_ROM = "/amiga/kick34005.A500";
 
 export const GAMES: Game[] = [
   {
     slug: "faceoff",
     title: "Face Off",
-    year: 1989,
+    year: 1991,
     publisher: "Krisalis",
     description: "Hockey sobre hielo rápido y brutal, con peleas incluidas.",
     disk: "/games/faceoff/disk1.adf",
