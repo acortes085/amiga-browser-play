@@ -62,10 +62,29 @@ function GamePage() {
       {launch ? (
         <div className="mt-6">
           <div className="aspect-[4/3] w-full border-2 bg-background pixel-shadow">
-            <iframe key={src} src={src} title={game.title} className="h-full w-full" allow="fullscreen; gamepad; autoplay" />
+            <iframe
+              key={src}
+              id="amiga-frame"
+              src={src}
+              title={game.title}
+              className="h-full w-full"
+              allow="fullscreen; gamepad; autoplay; keyboard-map"
+              onLoad={(e) => e.currentTarget.focus()}
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {KEYS.map((k) => (
+              <button
+                key={k.code}
+                onClick={() => sendKey(k)}
+                className="min-w-10 border-2 bg-secondary px-2 py-1 pixel-shadow hover:bg-primary hover:text-primary-foreground"
+              >
+                {k.label}
+              </button>
+            ))}
           </div>
           <p className="mt-3 text-muted-foreground">
-            Usa el botón de guardar del emulador para guardar tu partida en este navegador.
+            Haz clic dentro del juego para usar tu teclado, o pulsa estas teclas. Usa el botón de guardar del emulador para guardar tu partida en este navegador.
           </p>
           <button onClick={() => setLaunch(null)} className="mt-3 font-display text-xs text-primary hover:underline">
             ■ SALIR DEL JUEGO
