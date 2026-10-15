@@ -14,7 +14,7 @@ export type Game = {
 };
 
 /** Kickstart ROM compartida por todos los juegos */
-export const KICKSTART_ROM = "/amiga/kick.rom";
+export const KICKSTART_ROM = "/amiga/kick34005.A500";
 
 export const GAMES: Game[] = [
   {
