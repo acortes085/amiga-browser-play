@@ -71,5 +71,20 @@
   };
 </script>
 <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+<script>
+  // Parche: EmulatorJS (stable) falla al montar el menu "Disks" de juegos con .m3u
+  // ("Cannot set properties of undefined (setting 'disk')") y aborta el arranque.
+  // Envolvemos menuOptionChanged para que ese error no detenga el juego.
+  (function patchEJS() {
+    if (typeof EmulatorJS === "undefined" || !EmulatorJS.prototype.menuOptionChanged) return setTimeout(patchEJS, 5);
+    if (EmulatorJS.prototype.__patched) return;
+    const orig = EmulatorJS.prototype.menuOptionChanged;
+    EmulatorJS.prototype.menuOptionChanged = function (...args) {
+      try { return orig.apply(this, args); }
+      catch (err) { console.warn("[player] menuOptionChanged ignorado:", args[0], err); }
+    };
+    EmulatorJS.prototype.__patched = true;
+  })();
+</script>
 </body>
 </html>
