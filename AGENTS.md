@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Amiga games run in public/player.html (EmulatorJS puae core via CDN) inside an iframe; keeps the emulator out of SSR. Game list lives in src/lib/games.ts.
