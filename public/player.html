@@ -39,6 +39,19 @@
   window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
   window.EJS_startOnLoaded = true;
   window.EJS_language = "es-ES";
+  // Que todas las teclas del teclado lleguen al Amiga
+  window.EJS_defaultOptions = { puae_physical_keyboard_pass_through: "enabled" };
+  // Teclas virtuales enviadas desde la página principal
+  window.addEventListener("message", (e) => {
+    if (e.origin !== location.origin || e.data?.type !== "amiga-key") return;
+    const { key, code, keyCode } = e.data;
+    const target = document.querySelector("canvas") || document;
+    ["keydown", "keyup"].forEach((t, i) => setTimeout(() => {
+      const ev = new KeyboardEvent(t, { key, code, keyCode, which: keyCode, bubbles: true });
+      target.dispatchEvent(ev);
+    }, i * 120));
+  });
+  window.addEventListener("click", () => window.focus());
   if (mode === "point" && p.get("state")) window.EJS_loadStateURL = p.get("state");
 
   // Guardar estado: se guarda en el navegador en lugar de descargarse
