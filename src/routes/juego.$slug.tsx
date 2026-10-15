@@ -129,3 +129,21 @@ function GamePage() {
     </main>
   );
 }
+
+type VKey = { label: string; key: string; code: string; keyCode: number };
+const KEYS: VKey[] = [
+  ...Array.from({ length: 10 }, (_, i) => {
+    const n = (i + 1) % 10;
+    return { label: String(n), key: String(n), code: `Digit${n}`, keyCode: 48 + n };
+  }),
+  ...Array.from({ length: 10 }, (_, i) => ({ label: `F${i + 1}`, key: `F${i + 1}`, code: `F${i + 1}`, keyCode: 112 + i })),
+  { label: "ESPACIO", key: " ", code: "Space", keyCode: 32 },
+  { label: "ENTER", key: "Enter", code: "Enter", keyCode: 13 },
+  { label: "ESC", key: "Escape", code: "Escape", keyCode: 27 },
+];
+
+function sendKey(k: VKey) {
+  const f = document.getElementById("amiga-frame") as HTMLIFrameElement | null;
+  f?.contentWindow?.postMessage({ type: "amiga-key", ...k }, location.origin);
+  f?.focus();
+}
