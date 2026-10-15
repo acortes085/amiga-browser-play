@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amiga Player</title>
+<style>html,body{margin:0;height:100%;background:#000}#game{width:100%;height:100%}</style>
+</head>
+<body>
+<div id="game"></div>
+<script>
+  const p = new URLSearchParams(location.search);
+  const slug = p.get("slug");
+  const mode = p.get("mode");
+  const DB = "amiga-saves", STORE = "states";
+  function db() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open(DB, 1);
+      r.onupgradeneeded = () => r.result.createObjectStore(STORE);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function put(v) {
+    const d = await db();
+    return new Promise((res) => { const t = d.transaction(STORE, "readwrite"); t.objectStore(STORE).put(v, slug); t.oncomplete = res; });
+  }
+  async function get() {
+    const d = await db();
+    return new Promise((res) => { const q = d.transaction(STORE).objectStore(STORE).get(slug); q.onsuccess = () => res(q.result); q.onerror = () => res(null); });
+  }
+
+  window.EJS_player = "#game";
+  window.EJS_core = "puae";
+  window.EJS_gameUrl = p.get("game");
+  window.EJS_biosUrl = p.get("bios");
+  window.EJS_gameID = slug;
+  window.EJS_gameName = slug;
+  window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+  window.EJS_startOnLoaded = true;
+  window.EJS_language = "es-ES";
+  if (mode === "point" && p.get("state")) window.EJS_loadStateURL = p.get("state");
+
+  // Guardar estado: se guarda en el navegador en lugar de descargarse
+  window.EJS_onSaveState = async (e) => {
+    await put({ state: e.state, date: Date.now() });
+    parent.postMessage({ type: "amiga-saved", slug }, location.origin);
+  };
+  window.EJS_onLoadState = async () => {
+    const s = await get();
+    if (s) window.EJS_emulator.gameManager.loadState(s.state);
+  };
+  window.EJS_onGameStart = async () => {
+    if (mode === "saved") {
+      const s = await get();
+      if (s) setTimeout(() => window.EJS_emulator.gameManager.loadState(s.state), 500);
+    }
+  };
+</script>
+<script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+</body>
+</html>
