@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getGame, KICKSTART_ROM } from "@/lib/games";
 import { deleteSave, getSaveInfo } from "@/lib/saves";
 
-export const Route = createFileRoute("/juego/$slug")({
+export const Route = createFileRoute("/_authenticated/juego/$slug")({
   loader: ({ params }) => {
     const game = getGame(params.slug);
     if (!game) throw notFound();
