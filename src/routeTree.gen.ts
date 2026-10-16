@@ -9,68 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as JuegoSlugRouteImport } from './routes/juego.$slug'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedJuegoSlugRouteImport } from './routes/_authenticated/juego.$slug'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/_authenticated/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JuegoSlugRoute = JuegoSlugRouteImport.update({
-  id: '/juego/$slug',
+const AuthenticatedJuegoSlugRoute = AuthenticatedJuegoSlugRouteImport.update({
+  id: '/_authenticated/juego/$slug',
   path: '/juego/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/juego/$slug': typeof JuegoSlugRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/juego/$slug': typeof AuthenticatedJuegoSlugRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/juego/$slug': typeof JuegoSlugRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/juego/$slug': typeof AuthenticatedJuegoSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/juego/$slug': typeof JuegoSlugRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/juego/$slug': typeof AuthenticatedJuegoSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/juego/$slug'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/juego/$slug'
-  id: '__root__' | '/' | '/juego/$slug'
+  id: '__root__' | '/_authenticated/' | '/_authenticated/juego/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  JuegoSlugRoute: typeof JuegoSlugRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedJuegoSlugRoute: typeof AuthenticatedJuegoSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/juego/$slug': {
-      id: '/juego/$slug'
+    '/_authenticated/juego/$slug': {
+      id: '/_authenticated/juego/$slug'
       path: '/juego/$slug'
       fullPath: '/juego/$slug'
-      preLoaderRoute: typeof JuegoSlugRouteImport
+      preLoaderRoute: typeof AuthenticatedJuegoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  JuegoSlugRoute: JuegoSlugRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedJuegoSlugRoute: AuthenticatedJuegoSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
