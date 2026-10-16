@@ -102,6 +102,7 @@ function GamePage() {
             <h2 className="mb-3 font-display text-xs text-primary">1. DESDE EL INICIO</h2>
             <button className={btn} onClick={() => setLaunch({ mode: "start" })}>Arrancar el disco</button>
           </section>
+          {premium && (
           <section>
             <h2 className="mb-3 font-display text-xs text-primary">2. PARTIDA GUARDADA</h2>
             <button className={btn} disabled={!save} onClick={() => setLaunch({ mode: "saved" })}>
@@ -116,6 +117,8 @@ function GamePage() {
               </button>
             )}
           </section>
+          )}
+           {premium && (
           <section>
             <h2 className="mb-3 font-display text-xs text-primary">3. PUNTO ELEGIDO</h2>
             {game.points.length === 0 ? (
@@ -130,6 +133,7 @@ function GamePage() {
               </div>
             )}
           </section>
+          )}
         </div>
       )}
     </main>

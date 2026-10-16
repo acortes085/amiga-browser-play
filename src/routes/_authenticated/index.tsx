@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GAMES } from "@/lib/games";
+import { AppHeader } from "@/components/AppHeader";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -26,6 +27,7 @@ const toneBg = {
 function Index() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
+      <AppHeader />
       <header className="mb-10 flex items-center gap-4">
         <div className="boing h-14 w-14 shrink-0 animate-bounce" />
         <div>

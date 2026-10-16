@@ -1,9 +1,16 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate  } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyRoles } from "@/lib/roles";
 
 export function AppHeader() {
   const { data } = useMyRoles();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth" });
+  };
+
   return (
     <nav className="mb-6 flex flex-wrap items-center justify-end gap-4 text-sm">
       <span className="text-muted-foreground">{data?.email}</span>
@@ -15,7 +22,7 @@ export function AppHeader() {
       {data?.admin && (
         <Link to="/admin" className="font-display text-xs text-primary hover:underline">ADMIN</Link>
       )}
-      <button onClick={() => supabase.auth.signOut()} className="font-display text-xs hover:underline">
+      <button onClick={handleSignOut} className="font-display text-xs hover:underline">
         SALIR
       </button>
     </nav>
