@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { getGame, KICKSTART_ROM } from "@/lib/games";
 import { deleteSave, getSaveInfo } from "@/lib/saves";
+import { useMyRoles } from "@/lib/roles";
+import { AppHeader } from "@/components/AppHeader";
 
 export const Route = createFileRoute("/_authenticated/juego/$slug")({
   loader: ({ params }) => {
@@ -31,6 +33,8 @@ const btn = "w-full border-2 bg-secondary p-4 text-left pixel-shadow transition-
 
 function GamePage() {
   const { game } = Route.useLoaderData();
+  const { data: me } = useMyRoles();
+  const premium = !!me?.premium;
   const [launch, setLaunch] = useState<Launch>(null);
   const [save, setSave] = useState<{ date: number } | null>(null);
 
@@ -49,12 +53,14 @@ function GamePage() {
         game: game.disk,
         bios: KICKSTART_ROM,
         mode: launch.mode,
+        premium: premium ? "1" : "0",
         ...(launch.state ? { state: launch.state } : {}),
       })}`
     : "";
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">
+      <AppHeader />
       <Link to="/" className="font-display text-xs text-primary hover:underline">◀ VOLVER</Link>
       <h1 className="mt-4 font-display text-xl sm:text-2xl">{game.title}</h1>
       <p className="text-muted-foreground">{game.publisher} · {game.year} — {game.description}</p>
