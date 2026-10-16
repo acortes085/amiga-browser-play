@@ -28,3 +28,21 @@ export async function deleteSave(slug: string) {
     t.oncomplete = () => res();
   });
 }
+
+/** Solo admin: descarga el guardado actual del juego como archivo .state (para usarlo como "punto elegido") */
+export async function exportSave(slug: string, name?: string): Promise<boolean> {
+  const db = await open();
+  const saved = await new Promise<{ state: Uint8Array | ArrayBuffer } | undefined>((res) => {
+    const q = db.transaction(STORE).objectStore(STORE).get(slug);
+    q.onsuccess = () => res(q.result);
+    q.onerror = () => res(undefined);
+  });
+  if (!saved) return false;
+  const url = URL.createObjectURL(new Blob([saved.state as BlobPart], { type: "application/octet-stream" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${name || slug}.state`;
+  a.click();
+  URL.revokeObjectURL(url);
+  return true;
+}

@@ -11,7 +11,9 @@
 <script>
   const p = new URLSearchParams(location.search);
   const slug = p.get("slug");
-  const mode = p.get("mode");
+  const premium = p.get("premium") === "1";
+  // Los usuarios no premium solo pueden arrancar desde el inicio
+  const mode = premium ? p.get("mode") : "start";
   const DB = "amiga-saves", STORE = "states";
   function db() {
     return new Promise((res, rej) => {
@@ -53,6 +55,24 @@
   });
   window.addEventListener("click", () => window.focus());
   if (mode === "point" && p.get("state")) window.EJS_loadStateURL = p.get("state");
+  // Botones de la barra de EmulatorJS: los premium ven todos; el resto solo los basicos
+  // (se mantiene diskButton para poder cambiar de disco en juegos multidisco)
+  if (!premium) {
+    window.EJS_Buttons = {
+      settings: false,
+      saveState: false,
+      loadState: false,
+      quickSave: false,
+      quickLoad: false,
+      saveSavFiles: false,
+      loadSavFiles: false,
+      cheat: false,
+      screenRecord: false,
+      cacheManager: false,
+      netplay: false,
+      contextMenu: false
+    };
+  }
 
   // Guardar estado: se guarda en el navegador en lugar de descargarse
   window.EJS_onSaveState = async (e) => {

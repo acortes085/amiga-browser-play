@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { getGame, KICKSTART_ROM } from "@/lib/games";
-import { deleteSave, getSaveInfo } from "@/lib/saves";
+import { deleteSave, exportSave, getSaveInfo } from "@/lib/saves";
 import { useMyRoles } from "@/lib/roles";
 import { AppHeader } from "@/components/AppHeader";
 
@@ -92,6 +92,14 @@ function GamePage() {
           <p className="mt-3 text-muted-foreground">
             Haz clic dentro del juego para usar tu teclado, o pulsa estas teclas. Usa el botón de guardar del emulador para guardar tu partida en este navegador.
           </p>
+          {me?.admin && (
+            <button
+              onClick={async () => { if (!(await exportSave(game.slug))) alert("Aún no hay partida guardada: usa el botón de guardar del emulador primero."); }}
+              className="mt-3 mr-4 font-display text-xs text-primary hover:underline"
+            >
+              ⬇ EXPORTAR GUARDADO (.state, admin)
+            </button>
+          )}
           <button onClick={() => setLaunch(null)} className="mt-3 font-display text-xs text-primary hover:underline">
             ■ SALIR DEL JUEGO
           </button>
@@ -100,7 +108,7 @@ function GamePage() {
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           <section>
             <h2 className="mb-3 font-display text-xs text-primary">1. DESDE EL INICIO</h2>
-            <button className={btn} onClick={() => setLaunch({ mode: "start" })}>Arrancar el disco</button>
+            <button className={btn} disabled={!me} onClick={() => setLaunch({ mode: "start" })}>Arrancar el disco</button>
           </section>
           {premium && (
           <section>

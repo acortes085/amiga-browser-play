@@ -24,7 +24,7 @@ export const GAMES: Game[] = [
     publisher: "Krisalis",
     description: "Hockey sobre hielo rápido y brutal, con peleas incluidas.",
     disk: "/games/faceoff/disk1.adf",
-    points: [],
+    points: [{ label: "Loaded", file: "/games/faceoff/faceoff.state" }],
     tone: "blue",
   },
   {
@@ -34,7 +34,7 @@ export const GAMES: Game[] = [
     publisher: "Cinemaware",
     description: "Conquista Inglaterra con asedios, justas y rescates.",
     disk: "/games/defender-of-the-crown/defender.zip",
-    points: [],
+    points: [{ label: "Loaded", file: "/games/defender-of-the-crown/defender.state" }],
     tone: "red",
   },
   {
@@ -44,7 +44,7 @@ export const GAMES: Game[] = [
     publisher: "Renegade",
     description: "El fútbol de vista cenital más adictivo de la historia.",
     disk: "/games/sensible-soccer/sensible-soccer.zip",
-    points: [],
+    points: [{ label: "Loaded", file: "/games/sensible-soccer/sensible.state" }],
     tone: "green",
   },
   {
@@ -54,7 +54,7 @@ export const GAMES: Game[] = [
     publisher: "Psygnosis",
     description: "Shoot'em up de scroll lateral con un búho y música mítica.",
     disk: "/games/agony/agony.zip",
-    points: [],
+    points: [{ label: "Loaded", file: "/games/agony/agony.state" }],
     tone: "purple",
   },
   {
