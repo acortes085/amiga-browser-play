@@ -43,8 +43,17 @@ function Index() {
               params={{ slug: g.slug }}
               className="group block border-2 bg-card pixel-shadow transition-transform hover:-translate-y-1"
             >
-              <div className={`${toneBg[g.tone]} flex h-32 items-end p-3`}>
+              <div className={`${toneBg[g.tone]} relative flex aspect-[3/4] items-end overflow-hidden p-3`}>
                 <span className="font-display text-sm leading-relaxed text-foreground">{g.title}</span>
+                <img
+                  src={`/games/${g.slug}/cover.jpg`}
+                  alt={`Carátula de ${g.title}`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
               </div>
               <div className="p-3">
                 <p className="text-muted-foreground">{g.publisher} · {g.year}</p>
