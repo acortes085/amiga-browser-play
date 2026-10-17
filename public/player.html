@@ -42,7 +42,8 @@
   window.EJS_startOnLoaded = true;
   window.EJS_language = "es-ES";
   // Que todas las teclas del teclado lleguen al Amiga
-  window.EJS_defaultOptions = { puae_physical_keyboard_pass_through: "enabled" };
+  // keyboardInput = "Direct Keyboard Input" de EmulatorJS (si no, solo pasan las teclas del mando)
+  window.EJS_defaultOptions = { puae_physical_keyboard_pass_through: "enabled", keyboardInput: "enabled" };
   // Teclas virtuales enviadas desde la página principal
   window.addEventListener("message", (e) => {
     if (e.origin !== location.origin || e.data?.type !== "amiga-key") return;
@@ -84,6 +85,7 @@
     if (s) window.EJS_emulator.gameManager.loadState(s.state);
   };
   window.EJS_onGameStart = async () => {
+    try { window.EJS_emulator.gameManager.setKeyboardEnabled(true); } catch (err) { console.warn("[player] teclado", err); }
     if (mode === "saved") {
       const s = await get();
       if (s) setTimeout(() => window.EJS_emulator.gameManager.loadState(s.state), 500);
