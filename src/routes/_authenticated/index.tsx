@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GAMES } from "@/lib/games";
 import { AppHeader } from "@/components/AppHeader";
+import { GameCover } from "@/components/GameCover";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -15,14 +16,6 @@ export const Route = createFileRoute("/_authenticated/")({
   }),
   component: Index,
 });
-
-const toneBg = {
-  red: "bg-tone-red",
-  blue: "bg-tone-blue",
-  green: "bg-tone-green",
-  orange: "bg-tone-orange",
-  purple: "bg-tone-purple",
-} as const;
 
 function Index() {
   return (
@@ -43,18 +36,7 @@ function Index() {
               params={{ slug: g.slug }}
               className="group block border-2 bg-card pixel-shadow transition-transform hover:-translate-y-1"
             >
-              <div className={`${toneBg[g.tone]} relative flex aspect-[3/4] items-end overflow-hidden p-3`}>
-                <span className="font-display text-sm leading-relaxed text-foreground">{g.title}</span>
-                <img
-                  src={`/games/${g.slug}/cover.jpg`}
-                  alt={`Carátula de ${g.title}`}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </div>
+              <GameCover game={g} />
               <div className="p-3">
                 <p className="text-muted-foreground">{g.publisher} · {g.year}</p>
                 <p>{g.description}</p>
