@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { GAMES } from "@/lib/games";
+import { GAMES, getGenre } from "@/lib/games";
 import { AppHeader } from "@/components/AppHeader";
 import { GameCover } from "@/components/GameCover";
 
@@ -18,6 +19,10 @@ export const Route = createFileRoute("/_authenticated/")({
 });
 
 function Index() {
+  const [genre, setGenre] = useState("Todos");
+  const sorted = [...GAMES].sort((a, b) => a.title.localeCompare(b.title, "es"));
+  const genres = ["Todos", ...Array.from(new Set(sorted.map((g) => getGenre(g.slug)))).sort((a, b) => a.localeCompare(b, "es"))];
+  const visible = genre === "Todos" ? sorted : sorted.filter((g) => getGenre(g.slug) === genre);
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
       <AppHeader />
@@ -28,8 +33,19 @@ function Index() {
           <p className="text-muted-foreground">Elige un disco e inserta en DF0:</p>
         </div>
       </header>
+      <div className="mb-6 flex flex-wrap gap-2">
+        {genres.map((x) => (
+          <button
+            key={x}
+            onClick={() => setGenre(x)}
+            className={`border-2 px-3 py-1 font-display text-xs ${genre === x ? "bg-primary text-primary-foreground" : "bg-card hover:bg-muted"}`}
+          >
+            {x.toUpperCase()}
+          </button>
+        ))}
+      </div>
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {GAMES.map((g) => (
+        {visible.map((g) => (
           <li key={g.slug}>
             <Link
               to="/juego/$slug"
@@ -38,7 +54,7 @@ function Index() {
             >
               <GameCover game={g} />
               <div className="p-3">
-                <p className="text-muted-foreground">{g.publisher} · {g.year}</p>
+                <p className="text-muted-foreground">{g.publisher} · {g.year} · {getGenre(g.slug)}</p>
                 <p>{g.description}</p>
                 <p className="mt-2 font-display text-xs text-primary group-hover:underline">JUGAR ▶</p>
               </div>
