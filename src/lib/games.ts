@@ -260,3 +260,33 @@ export const GAMES: Game[] = [
 ];
 
 export const getGame = (slug: string) => GAMES.find((g) => g.slug === slug);
+
+/** Tipo de juego por slug (para los filtros de la portada) */
+export const GAME_GENRES: Record<string, string> = {
+  faceoff: "Deportes",
+  "defender-of-the-crown": "Estrategia",
+  "sensible-soccer": "Deportes",
+  agony: "Arcade",
+  "outrun-europa": "Conducción",
+  "north-and-south": "Estrategia",
+  pang: "Arcade",
+  "teenage-queen": "Cartas",
+  "world-cup-90": "Deportes",
+  silkworm: "Arcade",
+  heroquest: "Rol",
+  "pro-tennis-tour-2": "Deportes",
+  "panza-kick-boxing": "Lucha",
+  "beach-volley": "Deportes",
+  "tv-sports-basketball": "Deportes",
+  "tv-sports-football": "Deportes",
+  "dragon-ninja": "Lucha",
+  "escape-from-the-planet-of-the-robot-monsters": "Arcade",
+  "navy-moves": "Acción",
+  "operation-wolf": "Arcade",
+  "monkey-island": "Aventura",
+  "speedball-2": "Deportes",
+  "kick-off-2": "Deportes",
+  "indiana-jones-atlantis": "Aventura",
+};
+
+export const getGenre = (slug: string) => GAME_GENRES[slug] ?? "Otros";
