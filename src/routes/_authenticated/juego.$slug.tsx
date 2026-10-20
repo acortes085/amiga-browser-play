@@ -61,7 +61,12 @@ function GamePage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">
       <AppHeader />
-      <Link to="/" className="font-display text-xs text-primary hover:underline">◀ VOLVER</Link>
+      <Link to="/" className="font-display text-xs text-primary hover:underline">■ LISTADO </Link>
+      {launch && (
+        <button onClick={() => setLaunch(null)} className="mt-3 font-display text-xs text-primary hover:underline">
+            ◀ VOLVER ATRAS
+        </button>
+      )}
       <h1 className="mt-4 font-display text-xl sm:text-2xl">{game.title}</h1>
       <p className="text-muted-foreground">{game.publisher} · {game.year} — {game.description}</p>
 
@@ -92,7 +97,7 @@ function GamePage() {
           <p className="mt-3 text-muted-foreground">
             Haz clic dentro del juego para usar tu teclado, o pulsa estas teclas. Usa el botón de guardar del emulador para guardar tu partida en este navegador.
           </p>
-          {me?.admin && (
+          {((import.meta.env.DEV) || me?.admin) && (
             <button
               onClick={async () => { if (!(await exportSave(game.slug))) alert("Aún no hay partida guardada: usa el botón de guardar del emulador primero."); }}
               className="mt-3 mr-4 font-display text-xs text-primary hover:underline"
@@ -100,9 +105,6 @@ function GamePage() {
               ⬇ EXPORTAR GUARDADO (.state, admin)
             </button>
           )}
-          <button onClick={() => setLaunch(null)} className="mt-3 font-display text-xs text-primary hover:underline">
-            ■ SALIR DEL JUEGO
-          </button>
         </div>
       ) : (
         <div className="mt-8 grid gap-6 md:grid-cols-3">
