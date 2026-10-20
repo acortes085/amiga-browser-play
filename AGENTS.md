@@ -9,4 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - Amiga games run in public/player.html (EmulatorJS puae core via CDN) inside an iframe; keeps the emulator out of SSR. Game list lives in src/lib/games.ts.
-- Catalogue artwork uses GameCover and slug-named CDN asset pointers under src/assets/covers; central resolution preserves full covers and a fallback when an image is unavailable.
+- Catalogue artwork uses GameCover and real JPG files at public/covers/<slug>.jpg (user wants physical files in git); central resolution preserves full covers and a fallback when an image is unavailable.

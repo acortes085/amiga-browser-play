@@ -1,11 +1,6 @@
 import { useState } from "react";
 import type { Game } from "@/lib/games";
 
-const assets = import.meta.glob<{ url: string }>("../assets/covers/*.asset.json", {
-  eager: true,
-  import: "default",
-});
-
 const toneBg = {
   red: "bg-tone-red",
   blue: "bg-tone-blue",
@@ -14,24 +9,23 @@ const toneBg = {
   purple: "bg-tone-purple",
 } as const;
 
+/** Carátula: archivo real en public/covers/<slug>.jpg; si no existe, muestra el título. */
 export function GameCover({ game }: { game: Game }) {
   const [failed, setFailed] = useState(false);
-  const cover = assets[`../assets/covers/${game.slug}.jpg.asset.json`]?.url;
 
   return (
     <div className={`${toneBg[game.tone]} relative flex aspect-[3/4] items-end overflow-hidden p-3`}>
-      {cover && !failed ? (
+      <span className="font-display text-sm leading-relaxed text-foreground">{game.title}</span>
+      {!failed && (
         <img
-          src={cover}
+          src={`/covers/${game.slug}.jpg`}
           alt={`Carátula original de ${game.title}`}
           loading="lazy"
           width={600}
           height={800}
-          className="absolute inset-0 h-full w-full object-contain"
+          className="absolute inset-0 h-full w-full bg-card object-contain"
           onError={() => setFailed(true)}
         />
-      ) : (
-        <span className="font-display text-sm leading-relaxed text-foreground">{game.title}</span>
       )}
     </div>
   );
