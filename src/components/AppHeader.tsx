@@ -14,6 +14,14 @@ export function AppHeader() {
   return (
     <nav className="mb-6 flex flex-wrap items-center justify-end gap-4 text-sm">
       <span className="text-muted-foreground">{data?.email}</span>
+      <a
+        href="https://t.me/acores085"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-display text-xs text-muted-foreground hover:text-primary hover:underline"
+      >
+        ¿ALGÚN PROBLEMA?
+      </a>
       {data?.premium ? (
         <span className="font-display text-xs text-primary">★ PREMIUM</span>
       ) : (

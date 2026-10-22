@@ -10,10 +10,11 @@
 <div id="game"></div>
 <script>
   const p = new URLSearchParams(location.search);
-  const slug = p.get("slug");
-  const premium = p.get("premium") === "1";
+  const slug = p.get("slug") || "custom-game";
+  const isCustom = p.get("custom") === "1";
+  const premium = p.get("premium") === "1" || isCustom;
   // Los usuarios no premium solo pueden arrancar desde el inicio
-  const mode = premium ? p.get("mode") : "start";
+  const mode = premium ? (p.get("mode") || "start") : "start";
   const DB = "amiga-saves", STORE = "states";
   function db() {
     return new Promise((res, rej) => {
@@ -32,28 +33,30 @@
     return new Promise((res) => { const q = d.transaction(STORE).objectStore(STORE).get(slug); q.onsuccess = () => res(q.result); q.onerror = () => res(null); });
   }
 
+  // Resolver origen del juego: si es juego propio del usuario y el frame padre
+  // comparte la referencia directa al Blob, creamos la URL dentro de este propio contexto
+  // para evitar problemas de particionamiento o revocación en React StrictMode.
+  let gameUrl = p.get("game");
+  if (isCustom && window.parent) {
+    try {
+      const parentBlob = window.parent.__amigaCustomBlob;
+      if (parentBlob) {
+        gameUrl = URL.createObjectURL(parentBlob);
+      }
+    } catch (err) {
+      console.warn("[player] No se pudo obtener blob del padre:", err);
+    }
+  }
+
   window.EJS_player = "#game";
   window.EJS_core = "puae";
-  window.EJS_gameUrl = p.get("game");
-  window.EJS_biosUrl = p.get("bios");
+  window.EJS_gameUrl = gameUrl;
+  window.EJS_biosUrl = p.get("bios") || "/amiga/kick34005.A500";
   window.EJS_gameID = slug;
-  window.EJS_gameName = slug;
+  window.EJS_gameName = p.get("name") || slug;
   window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
   window.EJS_startOnLoaded = true;
   window.EJS_language = "es-ES";
-  // Que todas las teclas del teclado lleguen al Amiga
-  // keyboardInput = "Direct Keyboard Input" de EmulatorJS (si no, solo pasan las teclas del mando)
-  window.EJS_defaultOptions = { puae_physical_keyboard_pass_through: "enabled", keyboardInput: "enabled" };
-  // Teclas virtuales enviadas desde la página principal
-  window.addEventListener("message", (e) => {
-    if (e.origin !== location.origin || e.data?.type !== "amiga-key") return;
-    const { key, code, keyCode } = e.data;
-    const target = document.querySelector("canvas") || document;
-    ["keydown", "keyup"].forEach((t, i) => setTimeout(() => {
-      const ev = new KeyboardEvent(t, { key, code, keyCode, which: keyCode, bubbles: true });
-      target.dispatchEvent(ev);
-    }, i * 120));
-  });
   window.addEventListener("click", () => window.focus());
   if (mode === "point" && p.get("state")) window.EJS_loadStateURL = p.get("state");
   // Botones de la barra de EmulatorJS: los premium ven todos; el resto solo los basicos
